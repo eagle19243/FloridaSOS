@@ -4,6 +4,7 @@ import os
 import yaml
 import logging
 import csv
+from pathlib import Path
 
 
 def load_config():
@@ -44,6 +45,7 @@ def save_data(corp_name,
     # print(officer_addr)
     CFG = load_config()
     output = CFG.get('OUTPUT')
+    file = Path(output)
 
     field_names = ['Corporation Name',
                    'FEI/EIN Number',
@@ -54,9 +56,13 @@ def save_data(corp_name,
                    'Mailing Address',
                    'Registered Agent Name & Address',
                    'Officer Direct Detail Name & Address']
-    with open(output, 'w', newline='') as csvfile:
+    if file.is_file() is False:
+        with open(output, 'a', newline='') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=field_names)
+            writer.writeheader()
+
+    with open(output, 'a', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=field_names)
-        writer.writeheader()
         writer.writerow({'Corporation Name': corp_name,
                          'FEI/EIN Number': fei_ein_number,
                          'Date Filed': date_filed,

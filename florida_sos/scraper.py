@@ -108,6 +108,7 @@ class Scraper:
 
     def _get_url_next_on_list(self, soup):
         el_link = soup.find('a', {'title': 'Next On List'})
+        print(el_link)
         link = None
 
         if el_link:
