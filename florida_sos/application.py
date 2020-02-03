@@ -8,7 +8,7 @@ from .web import get_app
 CFG = load_config()
 
 # Init Scraper
-scraper = Scraper(CFG.get('SCRAPER'))
+scraper = Scraper(CFG)
 scraper.run()
 
 # Init Flask app

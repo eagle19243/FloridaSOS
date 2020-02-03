@@ -1,7 +1,8 @@
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 from datetime import date
-from .util import save_data
+from .util import save_data, remove_output_csv
+from .database import Database
 
 
 class Scraper:
@@ -9,10 +10,12 @@ class Scraper:
     """
 
     def __init__(self, settings):
-        self.settings = settings
+        self.entry_url = settings.get('SCRAPER')['entry_url']
+        self.database = Database(settings)
 
     def run(self):
-        self._process(self.settings['entry_url'])
+        remove_output_csv()
+        self._process(self.entry_url)
 
     def _process(self, url):
         print(url)
@@ -42,54 +45,89 @@ class Scraper:
                   principal_addr,
                   mailing_addr,
                   registered_agent_addr,
-                  officer_addr)
+                  officer_addr,
+                  url)
+        self.database.save_data(corp_name,
+                                fei_ein_number,
+                                date_filed,
+                                status,
+                                last_event,
+                                principal_addr,
+                                mailing_addr,
+                                registered_agent_addr,
+                                officer_addr,
+                                url)
         if url_next_on_list:
             self._process(url_next_on_list)
 
     def _get_corp_name(self, soup):
-        return soup.select('.detailSection.corporationName p')[1].get_text(strip=True)
+        el = soup.select('.detailSection.corporationName p')
+        return el[1].get_text(strip=True) if el and len(el) > 1 else ''
 
     def _get_fei_ein_number(self, soup):
-        return soup.find('label', {'for': 'Detail_FeiEinNumber'}) \
-            .next_element \
-            .next_element \
-            .get_text(strip=True)
+        el = soup.find('label', {'for': 'Detail_FeiEinNumber'})
+        return el.next_element.next_element.get_text(strip=True) if el else ''
 
     def _get_date_filed(self, soup):
-        return soup.find('label', {'for': 'Detail_FileDate'}) \
-            .next_element \
-            .next_element \
-            .get_text(strip=True)
+        el = soup.find('label', {'for': 'Detail_FileDate'})
+        return el.next_element.next_element.get_text(strip=True) if el else ''
 
     def _get_status(self, soup):
-        return soup.find('label', {'for': 'Detail_Status'}) \
-            .next_element \
-            .next_element \
-            .get_text(strip=True)
+        el = soup.find('label', {'for': 'Detail_Status'})
+        return el.next_element.next_element.get_text(strip=True) if el else ''
 
     def _get_last_event(self, soup):
-        return soup.find('label', {'for': 'Detail_LastEvent'}) \
-            .next_element \
-            .next_element \
-            .get_text(strip=True)
+        el = soup.find('label', {'for': 'Detail_LastEvent'})
+        return el.next_element.next_element.get_text(strip=True) \
+            if el \
+            else ''
 
     def _get_principal_addr(self, soup):
-        el_div = soup.select('.searchResultDetail .detailSection:nth-child(4) span:nth-child(2) div')[0]
-        return ' '.join(el_div.get_text().split())
+        el_filing_info = soup.select('.searchResultDetail .detailSection.filingInformation')
+
+        if not el_filing_info or len(el_filing_info) is 0:
+            return ''
+
+        el_principal = el_filing_info[0].next_sibling.next_sibling.select('span:nth-child(2) div')
+        return ' '.join(el_principal[0].get_text().split()) if el_principal and len(el_principal) > 0 else ''
 
     def _get_mailing_addr(self, soup):
-        el_div = soup.select('.searchResultDetail .detailSection:nth-child(5) span:nth-child(2) div')[0]
-        return ' '.join(el_div.get_text().split())
+        el_filing_info = soup.select('.searchResultDetail .detailSection.filingInformation')
+
+        if not el_filing_info or len(el_filing_info) is 0:
+            return ''
+
+        el_mailing = el_filing_info[0].next_sibling.next_sibling.next_sibling.next_sibling.select(
+            'span:nth-child(2) div')
+        return ' '.join(el_mailing[0].get_text().split()) if el_mailing and len(el_mailing) else ''
 
     def _get_registered_agent_addr(self, soup):
-        agent_name = soup.select('.searchResultDetail .detailSection:nth-child(6) span:nth-child(2)')[0]
-        agent_addr = soup.select('.searchResultDetail .detailSection:nth-child(6) span:nth-child(3) div')[0]
+        el_filing_info = soup.select('.searchResultDetail .detailSection.filingInformation')
 
-        return agent_name.get_text(strip=True) + '\r\n' + ' '.join(agent_addr.get_text().split())
+        if not el_filing_info or len(el_filing_info) is 0:
+            return ''
+
+        el_registered = el_filing_info[0].next_sibling.next_sibling.next_sibling.next_sibling.next_sibling.next_sibling
+        agent_name = el_registered.select('span:nth-child(2)')
+        agent_addr = el_registered.select('span:nth-child(3) div')
+
+        return agent_name[0].get_text(strip=True) + '\r\n' + ' '.join(agent_addr[0].get_text().split()) \
+            if agent_name and agent_addr and len(agent_name) > 0 and len(agent_addr) > 0 \
+            else ''
 
     def _get_officer_addr(self, soup):
-        el = soup.select('.searchResultDetail .detailSection:nth-child(7)')[0]
-        tmp_ary = list(filter(('').__ne__, el.get_text().split('\n')))
+        el_filing_info = soup.select('.searchResultDetail .detailSection.filingInformation')
+
+        if not el_filing_info or len(el_filing_info) is 0:
+            return ''
+
+        el_officer = el_filing_info[
+            0].next_sibling.next_sibling.next_sibling.next_sibling.next_sibling.next_sibling.next_sibling.next_sibling
+
+        if el_officer is None:
+            return ''
+
+        tmp_ary = list(filter(('').__ne__, el_officer.get_text().split('\n')))
         tmp_ary = list(filter(('\r').__ne__, tmp_ary))
         tmp_ary = tmp_ary[2:]
         final_ary = []
@@ -107,12 +145,11 @@ class Scraper:
         return ''.join(final_ary)
 
     def _get_url_next_on_list(self, soup):
-        el_link = soup.find('a', {'title': 'Next On List'})
-        print(el_link)
+        el = soup.find('a', {'title': 'Next On List'})
         link = None
 
-        if el_link:
-            link = 'http://search.sunbiz.org' + el_link['href']
+        if el:
+            link = 'http://search.sunbiz.org' + el['href']
 
         return link
 
@@ -120,7 +157,7 @@ class Scraper:
         return 'LLC' in corp
 
     def _is_date_filed_greater_than_5(self, date_filed):
-        date_filed_year = date_filed.split('/')[2]
+        date_filed_year = int(date_filed.split('/')[2])
         current_year = date.today().year
 
         return current_year - date_filed_year > 5

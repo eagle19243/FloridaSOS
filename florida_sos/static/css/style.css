@@ -1,0 +1,61 @@
+body {
+    padding-top: 0px;
+    height: auto;
+}
+.container {
+    width: 70%;
+    text-align: center;
+}
+#google_sheet_url {
+    margin-top: 20px;
+    font-weight: 400;
+}
+#btn_archive {
+    margin-top: 50px;
+    font-weight: 400;
+}
+#btn_archive_urls_from_sheet {
+    margin-top: 100px;
+}
+.progress-status {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.progress-url {
+    margin-bottom: 10px;
+    min-height: 40px;
+    height: auto;
+    text-align: center;
+}
+.progress-container {
+    margin-top: 50px;
+    height: 130px;
+}
+.progress {
+    display: none;
+}
+.checkbox-container {
+    margin-top: 40px;
+    text-align: left;
+}
+.checkbox-container a {
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 400;
+}
+.checkbox-container a:hover {
+    text-decoration: none;
+}
+
+.checkbox-container label {
+    font-weight: 400;
+}
+.checkbox-container .tooltip .tooltip-inner {
+    font-weight: 400;
+    text-align: left;
+    max-width: 350px;
+}
+

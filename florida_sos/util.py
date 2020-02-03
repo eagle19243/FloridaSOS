@@ -25,6 +25,16 @@ def load_config():
     return config
 
 
+def remove_output_csv():
+    CFG = load_config()
+    output = CFG.get('OUTPUT')
+    file = Path(output)
+    try:
+        file.unlink()
+    except FileNotFoundError:
+        print('No output file')
+
+
 def save_data(corp_name,
               fei_ein_number,
               date_filed,
@@ -33,16 +43,8 @@ def save_data(corp_name,
               principal_addr,
               mailing_addr,
               registered_agent_addr,
-              officer_addr):
-    # print(corp_name)
-    # print(fei_ein_number)
-    # print(date_filed)
-    # print(status)
-    # print(last_event)
-    # print(principal_addr)
-    # print(mailing_addr)
-    # print(registered_agent_addr)
-    # print(officer_addr)
+              officer_addr,
+              url):
     CFG = load_config()
     output = CFG.get('OUTPUT')
     file = Path(output)
@@ -55,20 +57,22 @@ def save_data(corp_name,
                    'Principal Address',
                    'Mailing Address',
                    'Registered Agent Name & Address',
-                   'Officer Direct Detail Name & Address']
+                   'Officer Direct Detail Name & Address',
+                   'Link']
     if file.is_file() is False:
-        with open(output, 'a', newline='') as csvfile:
+        with open(output, 'a') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=field_names)
             writer.writeheader()
 
-    with open(output, 'a', newline='') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=field_names)
-        writer.writerow({'Corporation Name': corp_name,
-                         'FEI/EIN Number': fei_ein_number,
-                         'Date Filed': date_filed,
-                         'Status': status,
-                         'Last Event': last_event,
-                         'Principal Address': principal_addr,
-                         'Mailing Address': mailing_addr,
-                         'Registered Agent Name & Address': registered_agent_addr,
-                         'Officer Direct Detail Name & Address': officer_addr})
+    with open(output, 'a') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow([corp_name,
+                         fei_ein_number,
+                         date_filed,
+                         status,
+                         last_event,
+                         principal_addr,
+                         mailing_addr,
+                         registered_agent_addr,
+                         officer_addr,
+                         url])
