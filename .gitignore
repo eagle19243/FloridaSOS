@@ -117,3 +117,5 @@ chrome-user-data
 .vscode
 *.swp
 *.swo
+
+output.csv
