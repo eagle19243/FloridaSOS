@@ -1,0 +1,8 @@
+SCRAPER:
+  entry_url: http://search.sunbiz.org/Inquiry/CorporationSearch/SearchResultDetail?inquirytype=EntityName&directionType=Initial&searchNameOrder=%200171090&aggregateId=domp-017109-d4aa226d-0dac-4819-a9a8-3fa740a27d81&listNameOrder=%200171090
+MYSQL:
+  host: localhost
+  user: root
+  password: root
+  db: florida_sos
+OUTPUT: output.csv
