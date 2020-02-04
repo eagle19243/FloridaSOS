@@ -35,7 +35,6 @@ class Scraper:
         officer_addr = self._get_officer_addr(soup)
 
         if self._is_corp_contain_llc(corp_name) and \
-                self._is_date_filed_greater_than_5(date_filed) and \
                 self._is_stauts_inact_ua(status) and \
                 self._is_last_event_matched(last_event):
             save_data(corp_name,
@@ -164,7 +163,7 @@ class Scraper:
         return current_year - date_filed_year > 5
 
     def _is_stauts_inact_ua(self, status):
-        return status is 'INACT/UA'
+        return status is 'INACTIVE'
 
     def _is_last_event_matched(self, last_event):
         return last_event is 'ADMIN DISSOLUTION FOR ANNUAL REPORT'
