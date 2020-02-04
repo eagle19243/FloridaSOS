@@ -20,6 +20,9 @@ function Init() {
     $('.btn-export').click(() => {
         downloadCSV();
     });
+    $('.btn-start').click(() => {
+        startWorker();
+    });
     refreshTable();
 }
 
@@ -51,6 +54,16 @@ function downloadCSV() {
 function getCorps(callback) {
     $.ajax({
         url: '/get_corps',
+        method: 'POST',
+        success: (result) => {
+            callback(JSON.parse(result));
+        }
+    });
+}
+
+function startWorker() {
+    $.ajax({
+        url: '/start_worker',
         method: 'POST',
         success: (result) => {
             callback(JSON.parse(result));

@@ -10,4 +10,7 @@ body {
 #tbl_corps thead th {
     text-align: center
 }
+.btn-start {
+    display: none;
+}
 

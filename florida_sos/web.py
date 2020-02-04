@@ -6,12 +6,9 @@ from .scraper import Scraper
 
 APP = Flask(__name__, static_folder='static', static_url_path='/static')
 CFG = load_config()
-SCRAPER = Scraper(CFG)
 
 
 def get_app():
-    SCRAPER.run()
-
     return APP
 
 
@@ -34,3 +31,11 @@ def get_corps():
 @APP.route('/get_csv', methods=['GET', 'POST'])
 def get_csv():
     return send_from_directory(APP.static_folder, 'output.csv', as_attachment=True)
+
+
+@APP.route('/start_worker', methods=['POST'])
+def start_worker():
+    scraper = Scraper(CFG)
+    scraper.run()
+
+    return json.dumps({'success': True})

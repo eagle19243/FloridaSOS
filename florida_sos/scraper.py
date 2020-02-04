@@ -12,10 +12,10 @@ class Scraper:
     def __init__(self, settings):
         self.entry_url = settings.get('SCRAPER')['entry_url']
         self.database = Database(settings)
-        self.database.remove_data()
 
     def run(self):
         remove_output_csv()
+        self.database.remove_data()
         self._process(self.entry_url)
 
     def _process(self, url):
@@ -34,30 +34,30 @@ class Scraper:
         registered_agent_addr = self._get_registered_agent_addr(soup)
         officer_addr = self._get_officer_addr(soup)
 
-        # if self._is_corp_contain_llc(corp_name) and \
-        #         self._is_date_filed_greater_than_5(date_filed) and \
-        #         self._is_stauts_inact_ua(status) and \
-        #         self._is_last_event_matched(last_event):
-        save_data(corp_name,
-                  fei_ein_number,
-                  date_filed,
-                  status,
-                  last_event,
-                  principal_addr,
-                  mailing_addr,
-                  registered_agent_addr,
-                  officer_addr,
-                  url)
-        self.database.save_data(corp_name,
-                                fei_ein_number,
-                                date_filed,
-                                status,
-                                last_event,
-                                principal_addr,
-                                mailing_addr,
-                                registered_agent_addr,
-                                officer_addr,
-                                url)
+        if self._is_corp_contain_llc(corp_name) and \
+                self._is_date_filed_greater_than_5(date_filed) and \
+                self._is_stauts_inact_ua(status) and \
+                self._is_last_event_matched(last_event):
+            save_data(corp_name,
+                      fei_ein_number,
+                      date_filed,
+                      status,
+                      last_event,
+                      principal_addr,
+                      mailing_addr,
+                      registered_agent_addr,
+                      officer_addr,
+                      url)
+            self.database.save_data(corp_name,
+                                    fei_ein_number,
+                                    date_filed,
+                                    status,
+                                    last_event,
+                                    principal_addr,
+                                    mailing_addr,
+                                    registered_agent_addr,
+                                    officer_addr,
+                                    url)
         if url_next_on_list:
             self._process(url_next_on_list)
 

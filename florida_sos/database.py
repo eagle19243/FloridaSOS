@@ -17,15 +17,15 @@ class Database:
         self.cur = self.con.cursor()
         self.cur.execute('CREATE TABLE IF NOT EXISTS `corps` ('
                          '`id` int(11) NOT NULL auto_increment, '
-                         '`corp_name` VARCHAR(50), '
-                         '`fei_ein_number` VARCHAR(15), '
-                         '`date_filed` VARCHAR(15), '
-                         '`status` VARCHAR(50), '
-                         '`last_event` VARCHAR(100), '
-                         '`principal_addr` VARCHAR(200), '
-                         '`mailing_addr` VARCHAR(200), '
-                         '`registered_agent_addr` VARCHAR(200), '
-                         '`officer_addr` VARCHAR(1000), '
+                         '`corp_name` VARCHAR(200), '
+                         '`fei_ein_number` VARCHAR(20), '
+                         '`date_filed` VARCHAR(20), '
+                         '`status` VARCHAR(100), '
+                         '`last_event` VARCHAR(300), '
+                         '`principal_addr` VARCHAR(300), '
+                         '`mailing_addr` VARCHAR(300), '
+                         '`registered_agent_addr` VARCHAR(500), '
+                         '`officer_addr` VARCHAR(2000), '
                          '`url` VARCHAR(400), '
                          'PRIMARY KEY (`id`))')
 
@@ -58,16 +58,16 @@ class Database:
                 `mailing_addr`, 
                 `registered_agent_addr`, 
                 `officer_addr`, 
-                `url`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')""" \
-                % (corp_name,
-                   fei_ein_number, 
-                   date_filed, status, 
-                   last_event, 
-                   principal_addr, 
-                   mailing_addr, 
-                   registered_agent_addr, 
-                   officer_addr, 
-                   url)
-        self.cur.execute(query)
+                `url`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+        print(query)
+        self.cur.execute(query, (corp_name,
+                                 fei_ein_number,
+                                 date_filed, status,
+                                 last_event,
+                                 principal_addr,
+                                 mailing_addr,
+                                 registered_agent_addr,
+                                 officer_addr,
+                                 url))
 
         return
