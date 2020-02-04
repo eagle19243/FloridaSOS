@@ -12,6 +12,7 @@ class Scraper:
     def __init__(self, settings):
         self.entry_url = settings.get('SCRAPER')['entry_url']
         self.database = Database(settings)
+        self.database.remove_data()
 
     def run(self):
         remove_output_csv()

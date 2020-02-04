@@ -46,7 +46,7 @@ def save_data(corp_name,
               officer_addr,
               url):
     CFG = load_config()
-    output = CFG.get('OUTPUT')
+    output = os.path.join(os.path.dirname(__file__), 'static', CFG.get('OUTPUT'))
     file = Path(output)
 
     field_names = ['Corporation Name',

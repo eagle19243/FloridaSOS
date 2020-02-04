@@ -13,7 +13,7 @@ class Database:
         self.cur = self.con.cursor()
         self.cur.execute('CREATE DATABASE IF NOT EXISTS %s' % db)
         self.con = pymysql.connect(host=host, user=user, password=password, db=db,
-                                   cursorclass=pymysql.cursors.DictCursor)
+                                   autocommit=True, cursorclass=pymysql.cursors.DictCursor)
         self.cur = self.con.cursor()
         self.cur.execute('CREATE TABLE IF NOT EXISTS `corps` ('
                          '`id` int(11) NOT NULL auto_increment, '
@@ -29,8 +29,12 @@ class Database:
                          '`url` VARCHAR(400), '
                          'PRIMARY KEY (`id`))')
 
-    def get_corps(self):
-        self.cur.execute('SELECT * FROM corps')
+    def remove_data(self):
+        self.cur.execute('TRUNCATE TABLE `corps`')
+        return
+
+    def get_data(self):
+        self.cur.execute('SELECT * FROM `corps`')
         result = self.cur.fetchall()
         return result
 
@@ -54,8 +58,16 @@ class Database:
                 `mailing_addr`, 
                 `registered_agent_addr`, 
                 `officer_addr`, 
-                `url`) VALUES ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10')"""
-        # % (corp_name, fei_ein_number, date_filed, status, last_event, principal_addr, mailing_addr, registered_agent_addr, officer_addr, url)
+                `url`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')""" \
+                % (corp_name,
+                   fei_ein_number, 
+                   date_filed, status, 
+                   last_event, 
+                   principal_addr, 
+                   mailing_addr, 
+                   registered_agent_addr, 
+                   officer_addr, 
+                   url)
         self.cur.execute(query)
 
         return

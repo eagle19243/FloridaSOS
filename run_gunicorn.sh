@@ -7,6 +7,7 @@ OPTS=(
   --access-logfile -
   --error-logfile -
   --log-level debug
+  --timeout 10800
   -b 0.0.0.0:8093
   --reload
 )

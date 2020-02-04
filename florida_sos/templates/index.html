@@ -5,8 +5,56 @@
   <meta name=”viewport” content=”width=device-width, initial-scale=1.0">
   <meta http-equiv=”X-UA-Compatible” content=”ie=edge”>
   <title>FloridaSOS</title>
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="{{url_for('static', filename='assets/global/css/bootstrap.min.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='assets/global/css/bootstrap-extend.min.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='assets/css/site.min.css')}}">
+  <!-- Plugins -->
+  <link rel="stylesheet" href="{{url_for('static', filename='assets/global/vendor/datatables-bootstrap/dataTables.bootstrap.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='assets/global/vendor/datatables-fixedheader/dataTables.fixedHeader.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='assets/global/vendor/datatables-responsive/dataTables.responsive.css')}}">
+  <!-- Fonts -->
+  <link rel="stylesheet" href="{{url_for('static', filename='assets/global/fonts/font-awesome/font-awesome.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='assets/global/fonts/material-design/material-design.min.css')}}">
+  <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>
+  <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+  <!-- Scripts -->
+  <script src="{{url_for('static', filename='assets/global/vendor/jquery/jquery.min.js')}}"></script>
+  <script src="{{url_for('static', filename='assets/global/vendor/bootstrap/bootstrap.min.js')}}"></script>
+  <!-- Plugins -->
+  <script src="{{url_for('static', filename='assets/global/vendor/datatables/jquery.dataTables.js')}}"></script>
+  <script src="{{url_for('static', filename='assets/global/vendor/datatables-fixedheader/dataTables.fixedHeader.js')}}"></script>
+  <script src="{{url_for('static', filename='assets/global/vendor/datatables-bootstrap/dataTables.bootstrap.js')}}"></script>
+  <script src="{{url_for('static', filename='assets/global/vendor/datatables-responsive/dataTables.responsive.js')}}"></script>
+  <script src="{{url_for('static', filename='assets/global/vendor/datatables-tabletools/dataTables.tableTools.js')}}"></script>
+  <!-- Core -->
+  <script src="{{url_for('static', filename='assets/global/js/core.js')}}"></script>
+  <script src="{{url_for('static', filename='assets/js/site.js')}}"></script>
+  <script src="{{url_for('static', filename='assets/global/js/configs/config-colors.js')}}"></script>
+  <script src="{{url_for('static', filename='assets/js/configs/config-tour.js')}}"></script>
+  <script src="{{url_for('static', filename='assets/global/js/components/datatables.js')}}"></script>
+  <script src="{{url_for('static', filename='js/index.js')}}"></script>
  </head>
  <body>
-  <h1>FloridaSOS</h1>
+  <div class="btn-container">
+   <button type="button" class="btn btn-primary btn-refresh">Refresh</button>
+   <button type="button" class="btn btn-primary btn-export">Export to CSV</button>
+  </div>
+  <table id="tbl_corps" class="table table-hover dataTable table-striped width-full" data-plugin="dataTable">
+   <thead>
+    <tr>
+     <th>No</th>
+     <th>Corporation Name</th>
+     <th>FEI/EIN Number</th>
+     <th>Date Filed</th>
+     <th>Status</th>
+     <th>Last Event</th>
+     <th>Principal Address</th>
+     <th>Mailing Address</th>
+     <th>Agent Name & Address</th>
+     <th>Officer Name & Address</th>
+    </tr>
+   </thead>
+  </table>
  </body>
 </html>
