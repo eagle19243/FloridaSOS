@@ -59,7 +59,6 @@ class Database:
                 `registered_agent_addr`, 
                 `officer_addr`, 
                 `url`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-        print(query)
         self.cur.execute(query, (corp_name,
                                  fei_ein_number,
                                  date_filed, status,
