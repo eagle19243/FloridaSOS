@@ -3,5 +3,5 @@
 import sys
 from .web import get_app
 # Init Flask app
-sys.setrecursionlimit(10**6)
+sys.setrecursionlimit(10**8)
 APP = get_app()
