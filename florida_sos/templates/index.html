@@ -36,13 +36,6 @@
   <script src="{{url_for('static', filename='js/index.js')}}"></script>
  </head>
  <body>
-  <div class="spinner-container">
-   <div class="spinner" id="loader-2">
-     <span></span>
-     <span></span>
-     <span></span>
-   </div>
-  </div>
   <div class="btn-container">
    <button type="button" class="btn btn-primary btn-resume">Resume</button>
    <button type="button" class="btn btn-primary btn-start">Restart</button>
@@ -52,7 +45,6 @@
   <table id="tbl_corps" class="table table-hover dataTable table-striped width-full" data-plugin="dataTable">
    <thead>
     <tr>
-     <th>No</th>
      <th>Corporation Name</th>
      <th>FEI/EIN Number</th>
      <th>Date Filed</th>
@@ -64,6 +56,21 @@
      <th>Officer Name & Address</th>
     </tr>
    </thead>
+   <tbody>
+    {% for corps in corps %}
+    <tr>
+     <td>{{ corps.corp_name }}</td>
+     <td>{{ corps.fei_ein_number }}</td>
+     <td>{{ corps.date_filed }}</td>
+     <td>{{ corps.status }}</td>
+     <td>{{ corps.last_event }}</td>
+     <td>{{ corps.principal_addr }}</td>
+     <td>{{ corps.mailing_addr }}</td>
+     <td>{{ corps.registered_agent_addr }}</td>
+     <td>{{ corps.officer_addr }}</td>
+    </tr>
+    {% endfor %}
+   </tbody>
   </table>
  </body>
 </html>

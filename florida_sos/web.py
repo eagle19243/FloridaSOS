@@ -20,15 +20,9 @@ def get_app():
 @APP.route('/', defaults={'path': ''})
 @APP.route('/<path:path>')
 def index(path=None):
-    return render_template('index.html')
-
-
-@APP.route('/get_corps', methods=['POST'])
-def get_corps():
     db = Database(CFG)
     corps = db.get_data()
-
-    return json.dumps(corps)
+    return render_template('index.html', corps=corps)
 
 
 @APP.route('/get_csv', methods=['GET', 'POST'])
