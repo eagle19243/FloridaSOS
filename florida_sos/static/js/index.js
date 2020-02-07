@@ -23,6 +23,10 @@ function Init() {
     $('.btn-start').click(() => {
         startWorker();
     });
+    $('.btn-resume').click(() => {
+        resumeWorker();
+    });
+
     refreshTable();
 }
 
@@ -68,7 +72,15 @@ function startWorker() {
         url: '/restart',
         method: 'POST',
         success: (result) => {
-            callback(JSON.parse(result));
+        }
+    });
+}
+
+function resumeWorker() {
+    $.ajax({
+        url: '/resume',
+        method: 'POST',
+        success: (result) => {
         }
     });
 }

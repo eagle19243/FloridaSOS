@@ -47,3 +47,13 @@ def restart():
     scraper.run()
 
     return json.dumps({'success': True})
+
+
+@APP.route('/resume', methods=['POST'])
+def restart():
+    db = Database(CFG)
+    scraper = Scraper(CFG)
+    scraper.stop()
+    scraper.run()
+
+    return json.dumps({'success': True})
