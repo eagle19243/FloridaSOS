@@ -13,6 +13,9 @@ body {
 .btn-start {
     display: none;
 }
+.btn-resume {
+    display: none;
+}
 #loader-2 span{
   display: inline-block;
   width: 20px;
