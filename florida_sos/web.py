@@ -50,7 +50,7 @@ def restart():
 
 
 @APP.route('/resume', methods=['POST'])
-def restart():
+def resume():
     db = Database(CFG)
     scraper = Scraper(CFG)
     scraper.stop()
