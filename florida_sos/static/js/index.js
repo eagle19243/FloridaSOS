@@ -27,6 +27,7 @@ function Init() {
 }
 
 function refreshTable() {
+    showSpinner();
     table.clear().draw();
     getCorps((corps) => {
         for (var i = 0; i < corps.length; i++) {
@@ -44,6 +45,7 @@ function refreshTable() {
             ];
             table.row.add(data).draw();
         }
+        hideSpinner()
     });
 }
 
@@ -69,4 +71,14 @@ function startWorker() {
             callback(JSON.parse(result));
         }
     });
+}
+
+function showSpinner() {
+    $('body').css('overflow', 'hidden');
+    $('.spinner-container').show();
+}
+
+function hideSpinner() {
+    $('body').css('overflow', 'auto');
+    $('.spinner-container').hide();
 }
