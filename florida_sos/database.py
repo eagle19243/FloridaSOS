@@ -28,6 +28,10 @@ class Database:
                          '`officer_addr` VARCHAR(2000), '
                          '`url` VARCHAR(400), '
                          'PRIMARY KEY (`id`))')
+        self.cur.execute('CREATE TABLE IF NOT EXISTS `logs` ('
+                         '`id` int(11) NOT NULL auto_increment, '
+                         '`url` VARCHAR(400), '
+                         'PRIMARY KEY (`id`))')
 
     def remove_data(self):
         self.cur.execute('TRUNCATE TABLE `corps`')
@@ -37,6 +41,27 @@ class Database:
         self.cur.execute('SELECT * FROM `corps`')
         result = self.cur.fetchall()
         return result
+
+    def get_last_url(self):
+        self.cur.execute('SELECT * FROM `logs` ORDER BY `id` DESC LIMIT 1')
+        result = self.cur.fetchone()
+        return result['url'] if result else None
+
+    def save_log(self, url):
+        last_url = self.get_last_url()
+
+        if last_url:
+            query = """UPDATE `logs` SET `url` = %s WHERE `url` = %s"""
+            self.cur.execute(query, (url, last_url))
+        else:
+            query = """INSERT INTO `logs` (`url`) VALUES (%s)"""
+            self.cur.execute(query, url)
+
+        return
+
+    def remove_log(self):
+        self.cur.execute('TRUNCATE TABLE `logs`')
+        return
 
     def save_data(self,
                   corp_name,

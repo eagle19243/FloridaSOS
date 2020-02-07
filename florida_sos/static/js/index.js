@@ -63,7 +63,7 @@ function getCorps(callback) {
 
 function startWorker() {
     $.ajax({
-        url: '/start_worker',
+        url: '/restart',
         method: 'POST',
         success: (result) => {
             callback(JSON.parse(result));

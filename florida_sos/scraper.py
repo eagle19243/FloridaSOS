@@ -10,20 +10,35 @@ class Scraper:
     """
 
     def __init__(self, settings):
-        self.entry_url = settings.get('SCRAPER')['entry_url']
         self.database = Database(settings)
+        self.entry_url = settings.get('SCRAPER')['entry_url']
+        self.should_stop = False
+        self.last_url = self.database.get_last_url()
+        if self.last_url:
+            self.entry_url = self.last_url
 
     def run(self):
-        remove_output_csv()
-        self.database.remove_data()
+        self.should_stop = False
         self._process(self.entry_url)
 
+    def stop(self):
+        self.should_stop = True
+
     def _process(self, url):
+        if self.should_stop is True:
+            return
+
         print(url)
         page = requests.get(url)
         soup = BeautifulSoup(page.content, 'html.parser')
 
         url_next_on_list = self._get_url_next_on_list(soup)
+
+        if self.last_url and url_next_on_list:
+            self.last_url = None
+            self._process(url_next_on_list)
+            return
+
         corp_name = self._get_corp_name(soup)
         fei_ein_number = self._get_fei_ein_number(soup)
         date_filed = self._get_date_filed(soup)
@@ -33,6 +48,8 @@ class Scraper:
         mailing_addr = self._get_mailing_addr(soup)
         registered_agent_addr = self._get_registered_agent_addr(soup)
         officer_addr = self._get_officer_addr(soup)
+
+        self.database.save_log(url)
 
         if self._is_corp_contain_llc(corp_name) and \
                 self._is_status_inactive(status) and \
